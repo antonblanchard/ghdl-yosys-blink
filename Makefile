@@ -6,10 +6,12 @@
 #ECPPACK   = ecppack
 
 # Use Docker images
+DOCKER=docker
+#DOCKER=podman
 PWD = $(shell pwd)
-PODMAN_GHDL    = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:beta
-PODMAN_NEXTPNR = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
-PODMAN_TRELLIS = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:trellis
+DOCKER_GHDL    = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:beta
+DOCKER_NEXTPNR = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
+DOCKER_TRELLIS = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:trellis
 GHDL           = ghdl
 GHDLSYNTH      = /usr/local/share/yosys/plugins/ghdl.so
 YOSYS          = yosys
@@ -34,14 +36,14 @@ OPENOCD_DEVICE_CONFIG=openocd/LFE5UM5G-85F.cfg
 all: vhdl_blink.bit
 
 vhdl_blink.json: vhdl_blink.vhdl
-	$(PODMAN_GHDL) $(GHDL) -a --std=08 $<
-	$(PODMAN_GHDL) $(YOSYS) -m $(GHDLSYNTH) -p "ghdl --std=08 toplevel; synth_ecp5 -json $@ -top toplevel"
+	$(DOCKER_GHDL) $(GHDL) -a --std=08 $<
+	$(DOCKER_GHDL) $(YOSYS) -m $(GHDLSYNTH) -p "ghdl --std=08 toplevel; synth_ecp5 -json $@ -top toplevel"
 
 vhdl_blink_out.config: vhdl_blink.json $(LPF)
-	$(PODMAN_NEXTPNR) $(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
+	$(DOCKER_NEXTPNR) $(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
 
 vhdl_blink.bit: vhdl_blink_out.config
-	$(PODMAN_TRELLIS) $(ECPPACK) --svf vhdl_blink.svf $< $@
+	$(DOCKER_TRELLIS) $(ECPPACK) --svf vhdl_blink.svf $< $@
 
 %.svf: %.bit
 
