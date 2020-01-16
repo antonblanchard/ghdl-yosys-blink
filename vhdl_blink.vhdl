@@ -31,7 +31,7 @@ begin
     end process;
 
     led_a <= led;
-    led_b <= uart0_rxd;
+    led_b <= not uart0_rxd;
     led_c <= '1';
 
     -- Wrap TX to RX
