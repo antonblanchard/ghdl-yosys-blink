@@ -9,6 +9,7 @@
 PWD = $(shell pwd)
 PODMAN_GHDL    = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:beta
 PODMAN_NEXTPNR = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
+PODMAN_TRELLIS = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:trellis
 GHDL           = ghdl
 GHDLSYNTH      = /usr/local/share/yosys/plugins/ghdl.so
 YOSYS          = yosys
@@ -40,7 +41,7 @@ vhdl_blink_out.config: vhdl_blink.json $(LPF)
 	$(PODMAN_NEXTPNR) $(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
 
 vhdl_blink.bit: vhdl_blink_out.config
-	$(ECPPACK) --svf vhdl_blink.svf $< $@
+	$(PODMAN_TRELLIS) $(ECPPACK) --svf vhdl_blink.svf $< $@
 
 %.svf: %.bit
 
