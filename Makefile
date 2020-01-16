@@ -3,17 +3,17 @@
 #GHDLSYNTH = ghdl.so
 #YOSYS     = yosys
 #NEXTPNR   = nextpnr-ecp5
-#ECPPACK   = ecppack
+ECPPACK   = ecppack
 
 # Use Docker images
 PWD = $(shell pwd)
 PODMAN_GHDL    = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:beta
-#PODMAN_NEXTPNR = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr
+PODMAN_NEXTPNR = podman run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
 GHDL           = ghdl
 GHDLSYNTH      = /opt/yosys/share/yosys/plugins/ghdl.so
 YOSYS          = yosys
-NEXTPNR        = /home/anton_unencrypted/yosys-install/bin/nextpnr-ecp5
-ECPPACK        = /home/anton_unencrypted/yosys-install/bin/ecppack
+NEXTPNR        = nextpnr-ecp5
+#ECPPACK        = ecppack
 
 
 # OrangeCrab with ECP85
