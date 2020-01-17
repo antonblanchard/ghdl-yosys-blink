@@ -9,9 +9,9 @@
 DOCKER=docker
 #DOCKER=podman
 PWD = $(shell pwd)
-DOCKER_GHDL    = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:beta
-DOCKER_NEXTPNR = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
-DOCKER_TRELLIS = $(DOCKER) run --rm -t -i -v $(PWD):/src -w /src ghdl/synth:trellis
+DOCKER_GHDL    = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:beta
+DOCKER_NEXTPNR = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
+DOCKER_TRELLIS = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:trellis
 GHDL           = ghdl
 GHDLSYNTH      = ghdl
 YOSYS          = yosys
