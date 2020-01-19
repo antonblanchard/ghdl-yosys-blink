@@ -46,7 +46,7 @@ vhdl_blink_out.config: vhdl_blink.json $(LPF)
 vhdl_blink.bit: vhdl_blink_out.config
 	$(DOCKER_TRELLIS) $(ECPPACK) --svf vhdl_blink.svf $< $@
 
-%.svf: %.bit
+vhdl_blink.svf: vhdl_blink.bit
 
 prog: vhdl_blink.svf
 	$(OPENOCD) -f $(OPENOCD_JTAG_CONFIG) -f $(OPENOCD_DEVICE_CONFIG) -c "transport select jtag; init; svf $<; exit"
