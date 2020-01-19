@@ -25,7 +25,7 @@ OPENOCD   = $(DOCKER) $(DOCKERARGS) --device /dev/bus/usb ghdl/synth:prog openoc
 #GHDLARGS=-gCLK_FREQUENCY=50000000
 #LPF=constraints/orange-crab.lpf
 #PACKAGE=CSFBGA285
-#NEXTPNRFLAGS=--um5g-85k --freq 50
+#NEXTPNR_FLAGS=--um5g-85k --freq 50
 #OPENOCD_JTAG_CONFIG=openocd/olimex-arm-usb-tiny-h.cfg
 #OPENOCD_DEVICE_CONFIG=openocd/LFE5UM5G-85F.cfg
 
@@ -33,7 +33,7 @@ OPENOCD   = $(DOCKER) $(DOCKERARGS) --device /dev/bus/usb ghdl/synth:prog openoc
 GHDL_GENERICS=-gCLK_FREQUENCY=12000000
 LPF=constraints/ecp5-evn.lpf
 PACKAGE=CABGA381
-NEXTPNRFLAGS=--um5g-85k --freq 12
+NEXTPNR_FLAGS=--um5g-85k --freq 12
 OPENOCD_JTAG_CONFIG=openocd/ecp5-evn.cfg
 OPENOCD_DEVICE_CONFIG=openocd/LFE5UM5G-85F.cfg
 
@@ -44,7 +44,7 @@ vhdl_blink.json: vhdl_blink.vhdl
 	$(YOSYS) -m $(GHDLSYNTH) -p "ghdl --std=08 $(GHDL_GENERICS) toplevel; synth_ecp5 -json $@"
 
 vhdl_blink_out.config: vhdl_blink.json $(LPF)
-	$(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
+	$(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNR_FLAGS) --package $(PACKAGE)
 
 vhdl_blink.bit: vhdl_blink_out.config
 	$(ECPPACK) --svf vhdl_blink.svf $< $@
