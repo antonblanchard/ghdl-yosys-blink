@@ -3,7 +3,7 @@
 Blink an LED on an FPGA using ghdl, yosys and nextpnr - a completely
 Open Source VHDL synthesis flow.
 
-# Supported Hardware
+## Supported Hardware
 
 Right now only Lattice ECP5 boards are supported, but you should be able
 to use anything that yosys and nextpnr supports. I've personally tested
