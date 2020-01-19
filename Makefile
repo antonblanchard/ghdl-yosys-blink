@@ -39,14 +39,14 @@ OPENOCD_DEVICE_CONFIG=openocd/LFE5UM5G-85F.cfg
 all: vhdl_blink.bit
 
 vhdl_blink.json: vhdl_blink.vhdl
-	$(DOCKER_GHDL) $(GHDL) -a --std=08 $<
-	$(DOCKER_GHDL) $(YOSYS) -m $(GHDLSYNTH) -p "ghdl --std=08 $(GHDL_GENERICS) toplevel; synth_ecp5 -json $@"
+	$(GHDL) -a --std=08 $<
+	$(YOSYS) -m $(GHDLSYNTH) -p "ghdl --std=08 $(GHDL_GENERICS) toplevel; synth_ecp5 -json $@"
 
 vhdl_blink_out.config: vhdl_blink.json $(LPF)
-	$(DOCKER_NEXTPNR) $(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
+	$(NEXTPNR) --json $< --lpf $(LPF) --textcfg $@ $(NEXTPNRFLAGS) --package $(PACKAGE)
 
 vhdl_blink.bit: vhdl_blink_out.config
-	$(DOCKER_TRELLIS) $(ECPPACK) --svf vhdl_blink.svf $< $@
+	$(ECPPACK) --svf vhdl_blink.svf $< $@
 
 vhdl_blink.svf: vhdl_blink.bit
 
