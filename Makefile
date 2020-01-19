@@ -4,6 +4,7 @@
 #YOSYS     = yosys
 #NEXTPNR   = nextpnr-ecp5
 #ECPPACK   = ecppack
+#OPENOCD    = openocd
 
 # Use Docker images
 DOCKER=docker
