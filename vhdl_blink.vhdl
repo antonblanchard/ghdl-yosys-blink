@@ -2,6 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity toplevel is
+    generic(
+        CLK_FREQUENCY : positive := 50000000
+    );
     port(
         clk : in  std_ulogic;
         rst : in  std_ulogic;
@@ -17,13 +20,13 @@ end entity toplevel;
 
 architecture behaviour of toplevel is
     signal led : std_ulogic := '0';
-    signal counter : integer range 0 to 50000000;
+    signal counter : integer range 0 to CLK_FREQUENCY;
 begin
     process(clk)
     begin
         if rising_edge(clk) then
             counter <= counter + 1;
-            if counter = 50000000 then
+            if counter = CLK_FREQUENCY then
                 led <= not led;
                 counter <= 0;
             end if;
