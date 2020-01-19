@@ -8,15 +8,16 @@
 # Use Docker images
 DOCKER=docker
 #DOCKER=podman
+#
 PWD = $(shell pwd)
-DOCKER_GHDL    = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:beta
-DOCKER_NEXTPNR = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:nextpnr-ecp5
-DOCKER_TRELLIS = $(DOCKER) run --rm -v $(PWD):/src -w /src ghdl/synth:trellis
-GHDL           = ghdl
-GHDLSYNTH      = ghdl
-YOSYS          = yosys
-NEXTPNR        = nextpnr-ecp5
-ECPPACK        = ecppack
+DOCKERARGS = run --rm -v $(PWD):/src -w /src
+#
+GHDL      = $(DOCKER) $(DOCKERARGS) ghdl/synth:beta ghdl
+GHDLSYNTH = ghdl
+YOSYS     = $(DOCKER) $(DOCKERARGS) ghdl/synth:beta yosys
+NEXTPNR   = $(DOCKER) $(DOCKERARGS) ghdl/synth:nextpnr-ecp5 nextpnr-ecp5
+ECPPACK   = $(DOCKER) $(DOCKERARGS) ghdl/synth:trellis ecppack
+OPENOCD   = $(DOCKER) $(DOCKERARGS) --device /dev/bus/usb ghdl/synth:prog openocd
 
 
 # OrangeCrab with ECP85
@@ -48,7 +49,7 @@ vhdl_blink.bit: vhdl_blink_out.config
 %.svf: %.bit
 
 prog: vhdl_blink.svf
-	openocd -f $(OPENOCD_JTAG_CONFIG) -f $(OPENOCD_DEVICE_CONFIG) -c "transport select jtag; init; svf $<; exit"
+	$(OPENOCD) -f $(OPENOCD_JTAG_CONFIG) -f $(OPENOCD_DEVICE_CONFIG) -c "transport select jtag; init; svf $<; exit"
 
 clean:
 	@rm -f work-obj08.cf *.bit *.json *.svf *.config
